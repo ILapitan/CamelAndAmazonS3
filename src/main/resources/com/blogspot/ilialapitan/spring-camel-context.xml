@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring
+       http://camel.apache.org/schema/spring/camel-spring.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <context:annotation-config/>
+    <context:component-scan base-package="com.blogspot.ilialapitan"/>
+
+    <!-- set up default amazon s3 client from amazon aws sdk -->
+    <bean id="amazonClient" class="com.amazonaws.services.s3.AmazonS3Client">
+        <constructor-arg>
+            <bean class="com.amazonaws.auth.BasicAWSCredentials">
+                <constructor-arg name="accessKey" value="[access_key]"/>
+                <constructor-arg name="secretKey" value="[secret_key]"/>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <!-- set up camel context -->
+    <camelContext id="camelContext" trace="true" xmlns="http://camel.apache.org/schema/spring">
+        <consumerTemplate id="consumer"/>
+        <template id="producer"/>
+
+        <!-- define rout for send file to amazon s3 -->
+        <route>
+            <from uri="direct:send"/>
+
+            <setHeader headerName="CamelAwsS3Key">
+                <method ref="camelService" method="key"/>
+            </setHeader>
+            <to uri="aws-s3://[bucket_name]?amazonS3Client=#amazonClient"/>
+        </route>
+
+        <!-- define route for receive file from amazon s3 -->
+        <route>
+            <from uri="direct:receive"/>
+            <to uri="aws-s3://[bucket_name]?amazonS3Client=#amazonClient&amp;deleteAfterRead=false&amp;prefix=#{camelService.key}"/>
+        </route>
+    </camelContext>
+</beans>

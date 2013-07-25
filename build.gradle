@@ -1,0 +1,22 @@
+apply plugin:'java'
+apply plugin:'idea'
+apply plugin:'eclipse'
+
+repositories{
+    mavenCentral()
+}
+
+dependencies{
+    compile 'com.amazonaws:aws-java-sdk:1.5.0',
+            'org.apache.camel:camel-core:2.11.0',
+            'org.apache.camel:camel-spring:2.11.0',
+            'org.apache.camel:camel-aws:2.11.0',
+            'org.springframework:spring-context:3.2.3.RELEASE',
+            'org.springframework:spring-core:3.2.3.RELEASE',
+            'org.springframework:spring-beans:3.2.3.RELEASE',
+            'com.sun.xml.bind:jaxb-impl:2.2.7' ,
+            'org.springframework:spring-test:3.2.3.RELEASE',
+            'org.apache.camel:camel-test:2.11.0',
+            'org.apache.camel:camel-test-spring:2.11.0',
+            'junit:junit:4.11'
+}
