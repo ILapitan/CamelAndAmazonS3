@@ -25,7 +25,7 @@ public class CamelServiceTest {
     //Test service provided java configuration.
     @Test
     public void testServiceJava() throws Exception {
-        String KEY =   "invoicing";
+        String KEY =   "[key]";
 
         CamelService camelService = new CamelServiceJavaDSL();
 
@@ -44,7 +44,7 @@ public class CamelServiceTest {
     //Test service provided Spring configuration.
     @Test
     public void testServiceSpring() throws Exception {
-        String KEY =   "invoicing";
+        String KEY =   "[key]";
 
         File fileOut = new File("[input_file]");
         File fileIn = new File("[output_file]");
